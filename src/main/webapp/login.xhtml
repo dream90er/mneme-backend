@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <title>Mnemo</title>
+</h:head>
+
+<h:body>
+    <h1>Log In</h1>
+    <h:form>
+        <h:outputLabel for="login" value="Login" />
+        <h:inputText id="login" value="#{login.login}" />
+        <br />
+        <h:outputLabel for="password" value="Password" />
+        <h:inputSecret id="password" value="#{login.password}" />
+        <br />
+        <h:commandButton value="Log in" action="#{login.submit}" />
+    </h:form>
+    <h:messages globalOnly="true"/>
+</h:body>
+
+</html>
