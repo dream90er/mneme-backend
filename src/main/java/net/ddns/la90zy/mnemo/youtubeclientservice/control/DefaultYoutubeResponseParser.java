@@ -16,6 +16,9 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
 
     @Override
     public Playlist parsePlaylistInfo(JsonObject info) {
+        if (isError(info)) {
+            throw new YoutubeParserException("Playlist not found or access forbidden.");
+        }
         JsonObject snippet = info.getJsonArray("items")
                 .getJsonObject(0)
                 .getJsonObject("snippet");
@@ -29,6 +32,9 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
 
     @Override
     public PlaylistPage parsePlaylistPage(JsonObject page) {
+        if (isError(page)) {
+            throw new YoutubeParserException("Playlist not found or access forbidden.");
+        }
         List<Track> tracks = new ArrayList<>(50);
         Optional<String> nextPageToken = page.containsKey("nextPageToken")
                 ? Optional.of(page.getString("nextPageToken"))
@@ -42,6 +48,7 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
     }
 
     private Track parsePlaylistItemSnippet(JsonObject snippet) {
+
         String videoId = snippet
                 .getJsonObject("resourceId")
                 .getString("videoId");
@@ -67,5 +74,10 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
                 .description(description)
                 .thumbnail(thumbnail)
                 .build();
+    }
+
+    private boolean isError(JsonObject object) {
+
+        return object.containsKey("error") || object.getJsonObject("pageInfo").getInt("totalResults") == 0;
     }
 }

@@ -1,5 +1,7 @@
 package net.ddns.la90zy.mnemo.youtubeclientservice.boundary;
 
+import net.ddns.la90zy.mnemo.syncservice.control.HostProviderNotAvailableException;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
@@ -22,12 +24,13 @@ public class YoutubeApiClient {
 
     public JsonObject processRequest(URI targetUri) {
         WebTarget target = client.target(targetUri);
-        JsonObject response = target.request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        JsonObject response;
+        try {
+            response = target.request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        } catch (Exception e) {
+            throw new HostProviderNotAvailableException(e.getMessage(), "Youtube");
+        }
         return response;
-    }
-
-    public JsonObject processRequest(URI targetUri, String accessToken) {
-        return processRequest(targetUri);
     }
 
     @PreDestroy

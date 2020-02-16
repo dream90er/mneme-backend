@@ -2,6 +2,7 @@ package net.ddns.la90zy.mnemo.youtubeclientservice.control;
 
 import net.ddns.la90zy.mnemo.syncservice.control.HostProviderClientService;
 import net.ddns.la90zy.mnemo.syncservice.control.HostProviderName;
+import net.ddns.la90zy.mnemo.syncservice.control.PlaylistNotFoundException;
 import net.ddns.la90zy.mnemo.syncservice.entity.Playlist;
 import net.ddns.la90zy.mnemo.syncservice.entity.Track;
 import net.ddns.la90zy.mnemo.youtubeclientservice.boundary.YoutubeApiClient;
@@ -21,7 +22,7 @@ import java.util.Optional;
 public class YoutubeClientService implements HostProviderClientService {
 
     @Inject
-    YoutubeApiClient youtubeApiClient;
+    private YoutubeApiClient youtubeApiClient;
 
     private final YoutubeResponseParser youtubeResponseParser;
     private final YoutubeRequestBuilder youtubeRequestBuilder;
@@ -34,13 +35,17 @@ public class YoutubeClientService implements HostProviderClientService {
     }
 
     @Override
-    public List<Track> getPlaylistTracks(String playlistId) {
+    public List<Track> getPlaylistTracks(String playlistId, String accessToken) {
         List<Track> result = new ArrayList<>(100);
-        URI request = youtubeRequestBuilder.buildPlaylistPageRequest(playlistId);
-        for (Optional<String> nextPageToken = processPlaylistPageRequest(request, result);
-             nextPageToken.isPresent();
-             nextPageToken = processPlaylistPageRequest(request, result)) {
-            request = youtubeRequestBuilder.buildPlaylistPageRequest(playlistId, nextPageToken.get());
+        URI request = youtubeRequestBuilder.buildPlaylistPageRequest(playlistId, accessToken);
+        try {
+            for (Optional<String> nextPageToken = processPlaylistPageRequest(request, result);
+                 nextPageToken.isPresent();
+                 nextPageToken = processPlaylistPageRequest(request, result)) {
+                request = youtubeRequestBuilder.buildPlaylistPageRequest(playlistId, nextPageToken.get(), accessToken);
+            }
+        } catch (YoutubeParserException e) {
+            throw new PlaylistNotFoundException(e.getMessage(), playlistId, "Youtube");
         }
         return result;
     }
@@ -53,22 +58,17 @@ public class YoutubeClientService implements HostProviderClientService {
     }
 
     @Override
-    public List<Track> getPlaylistTracks(String playlistId, String accessToken) {
-        return null;
-    }
-
-    @Override
-    public Playlist getPlaylistInfo(String playlistId) {
-        URI request = youtubeRequestBuilder.buildPlaylistInfoRequest(playlistId);
+    public Playlist getPlaylistInfo(String playlistId, String accessToken) {
+        URI request = youtubeRequestBuilder.buildPlaylistInfoRequest(playlistId, accessToken);
         JsonObject response = youtubeApiClient.processRequest(request);
-        Playlist playlist = youtubeResponseParser.parsePlaylistInfo(response);
+        Playlist playlist;
+        try {
+            playlist = youtubeResponseParser.parsePlaylistInfo(response);
+        } catch (YoutubeParserException e) {
+            throw new PlaylistNotFoundException(e.getMessage(), playlistId, "Youtube");
+        }
         playlist.setPlaylistIdInHostProvider(playlistId);
         return playlist;
-    }
-
-    @Override
-    public Playlist getPlaylistInfo(String playlistId, String accessToken) {
-        return null;
     }
 
     @Override

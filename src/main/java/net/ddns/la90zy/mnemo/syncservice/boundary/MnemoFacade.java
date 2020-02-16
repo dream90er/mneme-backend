@@ -16,24 +16,24 @@ import java.util.Set;
 public class MnemoFacade {
 
     @Inject
-    HostProviderService hostProviderService;
+    private HostProviderService hostProviderService;
 
     @Inject
-    PlaylistService playlistService;
+    private PlaylistService playlistService;
 
     @Inject
-    SyncService syncService;
+    private SyncService syncService;
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Resource
-    SessionContext sessionContext;
+    private SessionContext sessionContext;
 
     public void addPlaylistUserRequest(String hostProviderTitle, String id) {
         HostProvider hostProvider = hostProviderService.getHostProviderByTitle(hostProviderTitle).get();
         Optional<Playlist> existingPlaylist = playlistService.getPlaylistByHostProviderSpecificId(id, hostProvider);
-        Playlist playlist = existingPlaylist.orElseGet(() -> syncService.syncNew(hostProviderTitle, id));
+        Playlist playlist = existingPlaylist.orElseGet(() -> syncService.syncNew(hostProviderTitle, id, ""));
         playlist = playlistService.savePlaylist(playlist);
         String login = sessionContext.getCallerPrincipal().getName();
         User user = userService.getUserByLogin(login).get();

@@ -17,7 +17,7 @@ public class TrackService implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     public Track saveTrack(Track track) {
         if (null == track.getId()) {

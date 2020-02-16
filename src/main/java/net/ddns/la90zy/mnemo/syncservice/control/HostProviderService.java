@@ -16,7 +16,7 @@ public class HostProviderService implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     public HostProvider saveHostProvider(HostProvider hostProvider) {
         if (null == hostProvider.getId()) {

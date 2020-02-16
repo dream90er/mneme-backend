@@ -20,26 +20,16 @@ import java.util.stream.Collectors;
 public class SyncService {
 
     @Inject
-    HostProviderClientServiceFactory hostProviderClientServiceFactory;
+    private HostProviderClientServiceFactory hostProviderClientServiceFactory;
 
     @Inject
-    PlaylistService playlistService;
+    private PlaylistService playlistService;
 
     @Inject
-    TrackService trackService;
+    private TrackService trackService;
 
     @Inject
-    HostProviderService hostProviderService;
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void sync(Long playlistInternalId) {
-        Playlist existingPlaylist = playlistService.getPlaylistById(playlistInternalId);
-        HostProviderClientService hostProviderClientService = hostProviderClientServiceFactory
-                .getHostProviderClientService(existingPlaylist.getHostProvider().getTitle());
-        List<Track> receivedTracks = hostProviderClientService
-                .getPlaylistTracks(existingPlaylist.getPlaylistIdInHostProvider());
-        merge(existingPlaylist, receivedTracks);
-    }
+    private HostProviderService hostProviderService;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void sync(Long playlistInternalId, String accessToken) {
@@ -49,18 +39,6 @@ public class SyncService {
         List<Track> receivedTracks = hostProviderClientService
                 .getPlaylistTracks(existingPlaylist.getPlaylistIdInHostProvider(), accessToken);
         merge(existingPlaylist, receivedTracks);
-    }
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Playlist syncNew(String hostProviderName, String playlistId) {
-        HostProviderClientService hostProviderClientService = hostProviderClientServiceFactory
-                .getHostProviderClientService(hostProviderName);
-        Playlist playlist = hostProviderClientService.getPlaylistInfo(playlistId);
-        HostProvider hostProvider = hostProviderService.getHostProviderByTitle(hostProviderName).get();
-        hostProvider.addPlaylist(playlist);
-        List<Track> tracks = hostProviderClientService.getPlaylistTracks(playlistId);
-        tracks.forEach(t -> addTrack(playlist, t));
-        return playlist;
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

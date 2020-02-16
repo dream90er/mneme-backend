@@ -9,6 +9,7 @@ import net.ddns.la90zy.mnemo.syncservice.entity.Track;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,10 +19,10 @@ import java.util.stream.Collectors;
 public class PlaylistResource {
 
     @Inject
-    HostProviderService hostProviderService;
+    private HostProviderService hostProviderService;
 
     @Inject
-    PlaylistService playlistService;
+    private PlaylistService playlistService;
 
     @GET
     @Path("{hostProviderName}/{playlistId}")
@@ -38,9 +39,7 @@ public class PlaylistResource {
             if (!playlist.isPresent()) {
                 throw new NotFoundException("No such playlist found.");
             }
-        return playlist.get()
-                .getTracks()
-                .stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(playlist.get()
+                .getTracks());
     }
 }

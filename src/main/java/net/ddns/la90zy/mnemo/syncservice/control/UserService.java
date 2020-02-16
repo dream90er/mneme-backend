@@ -16,7 +16,7 @@ public class UserService implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     public User saveUser(User user) {
         if (null == user.getId()) {

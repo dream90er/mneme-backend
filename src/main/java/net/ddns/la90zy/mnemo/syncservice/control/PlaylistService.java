@@ -17,7 +17,7 @@ public class PlaylistService implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     public Playlist savePlaylist(Playlist playlist) {
         if (null == playlist.getId()) {

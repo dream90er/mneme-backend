@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface HostProviderClientService {
 
-    List<Track> getPlaylistTracks(String playlistId);
     List<Track> getPlaylistTracks(String playlistId, String accessToken);
-    Playlist getPlaylistInfo(String playlistId);
     Playlist getPlaylistInfo(String playlistId, String accessToken);
     String getAccessToken(String refreshToken);
     default String getName() {

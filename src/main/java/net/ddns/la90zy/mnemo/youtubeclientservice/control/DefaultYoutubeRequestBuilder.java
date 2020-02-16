@@ -1,5 +1,7 @@
 package net.ddns.la90zy.mnemo.youtubeclientservice.control;
 
+import javafx.util.Pair;
+
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
@@ -17,10 +19,13 @@ public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
     }
 
     @Override
-    public URI buildPlaylistPageRequest(String playlistId) {
+    public URI buildPlaylistPageRequest(String playlistId, String accessToken) {
+        Pair<String, String> accessParam = accessToken.isEmpty()
+                ? new Pair<>("key", API_KEY)
+                : new Pair<>("access_token", accessToken);
         return UriBuilder.fromUri(API_URL)
                 .path("playlistItems")
-                .queryParam("key", API_KEY)
+                .queryParam(accessParam.getKey(), accessParam.getValue())
                 .queryParam("part", PART)
                 .queryParam("maxResults", MAX_RESULTS)
                 .queryParam("playlistId", playlistId)
@@ -28,10 +33,13 @@ public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
     }
 
     @Override
-    public URI buildPlaylistPageRequest( String playlistId, String pageToken) {
+    public URI buildPlaylistPageRequest( String playlistId, String pageToken, String accessToken) {
+        Pair<String, String> accessParam = accessToken.isEmpty()
+                ? new Pair<>("key", API_KEY)
+                : new Pair<>("access_token", accessToken);
         return UriBuilder.fromUri(API_URL)
                 .path("playlistItems")
-                .queryParam("key", API_KEY)
+                .queryParam(accessParam.getKey(), accessParam.getValue())
                 .queryParam("part", PART)
                 .queryParam("maxResults", MAX_RESULTS)
                 .queryParam("playlistId", playlistId)
@@ -40,10 +48,13 @@ public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
     }
 
     @Override
-    public URI buildPlaylistInfoRequest(String playlistId) {
+    public URI buildPlaylistInfoRequest(String playlistId, String accessToken) {
+        Pair<String, String> accessParam = accessToken.isEmpty()
+                ? new Pair<>("key", API_KEY)
+                : new Pair<>("access_token", accessToken);
         return UriBuilder.fromUri(API_URL)
                 .path("playlists")
-                .queryParam("key", API_KEY)
+                .queryParam(accessParam.getKey(), accessParam.getValue())
                 .queryParam("part", PART)
                 .queryParam("id", playlistId)
                 .build();

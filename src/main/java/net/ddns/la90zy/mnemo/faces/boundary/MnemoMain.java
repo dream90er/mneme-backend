@@ -1,10 +1,14 @@
 package net.ddns.la90zy.mnemo.faces.boundary;
 
 import net.ddns.la90zy.mnemo.syncservice.boundary.MnemoFacade;
+import net.ddns.la90zy.mnemo.syncservice.control.PlaylistNotFoundException;
 import net.ddns.la90zy.mnemo.syncservice.entity.Playlist;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.util.Set;
 
@@ -12,7 +16,12 @@ import java.util.Set;
 public class MnemoMain {
 
     @Inject
-    MnemoFacade mnemoFacade;
+    private MnemoFacade mnemoFacade;
+
+    @Inject
+    private FacesContext facesContext;
+
+    private UIComponent playlistIdField;
 
     private Set<Playlist> playlists;
     private String playlistId;
@@ -23,8 +32,16 @@ public class MnemoMain {
     }
 
     public void submit() {
-        mnemoFacade.addPlaylistUserRequest("Youtube", playlistId);
-        playlists = mnemoFacade.getUserPlaylists();
+        //TODO this is not how exception handling works in JSF
+        try {
+            mnemoFacade.addPlaylistUserRequest("Youtube", playlistId);
+            playlists = mnemoFacade.getUserPlaylists();
+        } catch (PlaylistNotFoundException e) {
+            facesContext.addMessage(playlistIdField.getClientId(facesContext), new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(),
+                    String.format("Playlist ID: %s\nProvider: %s", e.getPlaylistExternalId(), e.getHostProviderName())));
+        }
     }
 
     public void setPlaylistId(String playlistId) {
@@ -37,5 +54,13 @@ public class MnemoMain {
 
     public String getPlaylistId() {
         return playlistId;
+    }
+
+    public UIComponent getPlaylistIdField() {
+        return playlistIdField;
+    }
+
+    public void setPlaylistIdField(UIComponent playlistIdField) {
+        this.playlistIdField = playlistIdField;
     }
 }

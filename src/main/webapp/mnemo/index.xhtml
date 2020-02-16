@@ -19,7 +19,8 @@
         <h:outputText value="Here you can add Youtube playlists to your accaunt." />
         <br />
         <h:outputLabel for="inputPlaylist" value="Playlist ID"/>
-        <h:inputText id="inputPlaylist" value="#{mnemoMain.playlistId}"/>
+        <h:inputText id="inputPlaylist" value="#{mnemoMain.playlistId}" binding="#{mnemoMain.playlistIdField}"/>
+        <h:message for="inputPlaylist" />
         <h:commandButton value="Submit"
                          action="#{mnemoMain.submit}">
             <f:ajax execute="@form" render=":table"/>

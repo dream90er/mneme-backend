@@ -14,6 +14,6 @@ public class Logout {
     public String submit() throws ServletException{
         httpServletRequest.logout();
         httpServletRequest.getSession().invalidate();
-        return "/index?redirect=true";
+        return "/index?faces-redirect=true";
     }
 }
