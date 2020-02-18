@@ -28,7 +28,6 @@ public class PlaylistResource {
     @Path("{hostProviderName}/{playlistId}")
     public List<Track> getPlaylist(@PathParam("hostProviderName") String hostProviderName,
                                    @PathParam("playlistId") String playlistId) {
-
             Optional<HostProvider> hostProvider = hostProviderService
                     .getHostProviderByTitle(hostProviderName);
             if (!hostProvider.isPresent()) {

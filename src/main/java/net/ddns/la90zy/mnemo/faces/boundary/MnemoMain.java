@@ -24,6 +24,7 @@ public class MnemoMain {
     private UIComponent playlistIdField;
 
     private Set<Playlist> playlists;
+
     private String playlistId;
 
     @PostConstruct
@@ -33,6 +34,7 @@ public class MnemoMain {
 
     public void submit() {
         //TODO this is not how exception handling works in JSF
+        // PS This is how exception handling works, but... not with AJAX :P
         try {
             mnemoFacade.addPlaylistUserRequest("Youtube", playlistId);
             playlists = mnemoFacade.getUserPlaylists();

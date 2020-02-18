@@ -12,8 +12,6 @@ import java.util.Optional;
 
 public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
 
-    public DefaultYoutubeResponseParser() {}
-
     @Override
     public Playlist parsePlaylistInfo(JsonObject info) {
         if (isError(info)) {
@@ -36,9 +34,7 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
             throw new YoutubeParserException("Playlist not found or access forbidden.");
         }
         List<Track> tracks = new ArrayList<>(50);
-        Optional<String> nextPageToken = page.containsKey("nextPageToken")
-                ? Optional.of(page.getString("nextPageToken"))
-                : Optional.empty();
+        String nextPageToken = page.getString("nextPageToken");
         page.getJsonArray("items").stream()
                 .map(JsonValue::asJsonObject)
                 .map(j -> j.getJsonObject("snippet"))
@@ -48,7 +44,6 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
     }
 
     private Track parsePlaylistItemSnippet(JsonObject snippet) {
-
         String videoId = snippet
                 .getJsonObject("resourceId")
                 .getString("videoId");
@@ -77,7 +72,6 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
     }
 
     private boolean isError(JsonObject object) {
-
         return object.containsKey("error") || object.getJsonObject("pageInfo").getInt("totalResults") == 0;
     }
 }

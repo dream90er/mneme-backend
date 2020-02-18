@@ -33,7 +33,8 @@ public class MnemoFacade {
     public void addPlaylistUserRequest(String hostProviderTitle, String id) {
         HostProvider hostProvider = hostProviderService.getHostProviderByTitle(hostProviderTitle).get();
         Optional<Playlist> existingPlaylist = playlistService.getPlaylistByHostProviderSpecificId(id, hostProvider);
-        Playlist playlist = existingPlaylist.orElseGet(() -> syncService.syncNew(hostProviderTitle, id, ""));
+        Playlist playlist = existingPlaylist.orElseGet(
+                () -> syncService.syncNew(hostProviderTitle, id, ""));
         playlist = playlistService.savePlaylist(playlist);
         String login = sessionContext.getCallerPrincipal().getName();
         User user = userService.getUserByLogin(login).get();

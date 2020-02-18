@@ -36,9 +36,15 @@ public class SyncService {
         Playlist existingPlaylist = playlistService.getPlaylistById(playlistInternalId);
         HostProviderClientService hostProviderClientService = hostProviderClientServiceFactory
                 .getHostProviderClientService(existingPlaylist.getHostProvider().getTitle());
-        List<Track> receivedTracks = hostProviderClientService
-                .getPlaylistTracks(existingPlaylist.getPlaylistIdInHostProvider(), accessToken);
-        merge(existingPlaylist, receivedTracks);
+        List<Track> receivedTracks;
+        try {
+            receivedTracks = hostProviderClientService
+                    .getPlaylistTracks(existingPlaylist.getPlaylistIdInHostProvider(), accessToken);
+            merge(existingPlaylist, receivedTracks);
+            existingPlaylist.setAvailability(true);
+        } catch (PlaylistNotFoundException e) {
+            existingPlaylist.setAvailability(false);
+        }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

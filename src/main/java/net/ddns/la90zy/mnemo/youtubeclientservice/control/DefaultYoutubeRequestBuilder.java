@@ -8,9 +8,11 @@ import java.net.URI;
 public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
 
     private static final String PART = "snippet";
+
     private static final String MAX_RESULTS = "50";
 
     private final String API_URL;
+
     private final String  API_KEY;
 
     public DefaultYoutubeRequestBuilder(String apiUrl, String apiKey) {

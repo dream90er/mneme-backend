@@ -1,8 +1,6 @@
 package net.ddns.la90zy.mnemo.syncservice.control;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
@@ -11,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class HostProviderClientServiceFactory {
 
     @Inject

@@ -24,8 +24,11 @@ public class User {
     public static class Builder {
 
         private String login;
+
         private String password;
+
         private Group group;
+
         private String email;
 
         public Builder() {}

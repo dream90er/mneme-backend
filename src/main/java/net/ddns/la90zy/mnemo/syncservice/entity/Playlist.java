@@ -20,7 +20,9 @@ public class Playlist {
     public static class Builder {
 
         private String title;
+
         private String ownerId;
+
         private String playlistIdInHostProvider;
 
         public Builder() {}

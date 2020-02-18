@@ -37,6 +37,11 @@ public class PlaylistService implements Serializable {
         return query.getResultList();
     }
 
+    public List<Long> getAllPlaylistIDs() {
+        TypedQuery<Long> query = em.createQuery("SELECT p.id FROM Playlist p", Long.class);
+        return query.getResultList();
+    }
+
     public Optional<Playlist> getPlaylistByHostProviderSpecificId(String id, HostProvider hostProvider) {
         TypedQuery<Playlist> query = em.createNamedQuery("Playlist.findByHostProviderSpecificId", Playlist.class);
         query.setParameter("id", id)

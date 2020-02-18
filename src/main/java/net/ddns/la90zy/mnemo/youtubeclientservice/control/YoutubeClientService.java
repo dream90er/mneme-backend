@@ -25,6 +25,7 @@ public class YoutubeClientService implements HostProviderClientService {
     private YoutubeApiClient youtubeApiClient;
 
     private final YoutubeResponseParser youtubeResponseParser;
+
     private final YoutubeRequestBuilder youtubeRequestBuilder;
 
     @Inject

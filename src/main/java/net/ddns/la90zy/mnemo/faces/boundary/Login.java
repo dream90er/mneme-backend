@@ -18,10 +18,11 @@ import java.io.IOException;
 @Model
 public class Login {
 
+    private String password;
+
     @Inject
     @ManagedProperty("#{param.login}")
     private String login;
-    private String password;
 
     @Inject
     @ManagedProperty("#{param.new}")

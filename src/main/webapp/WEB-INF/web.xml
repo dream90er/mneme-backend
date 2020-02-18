@@ -70,4 +70,10 @@
     <session-config>
         <tracking-mode>COOKIE</tracking-mode>
     </session-config>
+    
+    <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
 </web-app>

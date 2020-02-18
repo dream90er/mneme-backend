@@ -14,6 +14,7 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
                 loginPage = "/login.xhtml",
+                useForwardToLogin = false,
                 errorPage = ""
         )
 )
@@ -44,7 +45,6 @@ public class ApplicationConfig {
         private String hashSaltSizeBytes = "64";
 
         public String[] getHashAlgorithmParameters() {
-
                 return new String[] {"Pbkdf2PasswordHash.Iterations=" + hashIterations,
                         "Pbkdf2PasswordHash.Algorithm=" + hashAlgorithm,
                         "Pbkdf2PasswordHash.SaltSizeBytes=" + hashSaltSizeBytes};

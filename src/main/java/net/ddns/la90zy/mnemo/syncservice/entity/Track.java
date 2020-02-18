@@ -22,8 +22,11 @@ public class Track {
     public static class Builder {
 
         private String title;
+
         private String trackIdInHostProvider;
+
         private String description;
+
         private String thumbnail;
 
         public Builder() {}

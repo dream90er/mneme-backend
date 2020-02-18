@@ -7,14 +7,14 @@ import java.util.Optional;
 
 public class PlaylistPage {
 
-    public static PlaylistPage create(List<Track> tracks, Optional<String> nextPageToken) {
+    public static PlaylistPage create(List<Track> tracks, String nextPageToken) {
         return new PlaylistPage(tracks, nextPageToken);
     }
 
     private List<Track> tracks;
-    private Optional<String> nextPageToken;
+    private String nextPageToken;
 
-    public PlaylistPage(List<Track> tracks, Optional<String> nextPageToken) {
+    public PlaylistPage(List<Track> tracks, String nextPageToken) {
         this.tracks = tracks;
         this.nextPageToken = nextPageToken;
     }
@@ -24,6 +24,8 @@ public class PlaylistPage {
     }
 
     public Optional<String> getNextPageToken() {
-        return nextPageToken;
+        return null == nextPageToken
+                ? Optional.empty()
+                : Optional.of(nextPageToken);
     }
 }
