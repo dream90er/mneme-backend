@@ -6,38 +6,74 @@
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Mnemo</title>
+    <h:outputStylesheet>
+        .trackNotAvailable {
+            background-color: darkred;
+        }
+    </h:outputStylesheet>
 </h:head>
 <h:body>
-    <h1>
+    <h1 style="text-align: center">
         <h:outputText value="Hello #{request.userPrincipal.name}." />
     </h1>
-    <h:form>
-        <br />
-        <h:outputText value="Here you can add Youtube playlists to your accaunt." />
-        <br />
-        <h:outputLabel for="inputPlaylist" value="Playlist ID"/>
-        <h:inputText id="inputPlaylist" value="#{mnemoMain.playlistId}" binding="#{mnemoMain.playlistIdField}"/>
-        <h:message for="inputPlaylist" />
-        <h:commandButton value="Submit"
-                         action="#{mnemoMain.submit}">
-            <f:ajax execute="@form" render=":table"/>
-        </h:commandButton>
+    <h:form id="addPlaylistForm">
+        Here you can add Youtube playlists to your accaunt.
+        <h:panelGrid columns="3">
+            <p:outputLabel for="inputPlaylist" value="Playlist ID"/>
+            <p:inputText id="inputPlaylist" value="#{mnemoBacking.playlistId}" binding="#{mnemoBacking.playlistIdField}"/>
+            <p:message for="inputPlaylist" />
+            <p:commandButton value="Submit"
+                             action="#{mnemoBacking.submit}"
+                             ajax="false"/>
+
+        </h:panelGrid>
     </h:form>
-    <br />
-    <h:outputText value="Your palaylists:" />
-    <h:dataTable id="table" value="#{mnemoMain.playlists}" var="playlist">
-        <h:column>
-            <h:outputText value="#{playlist.title}" style="color: #{playlist.availability ? '#000000' : '#FF0000'}"/>
-            <h:dataTable id="innertable" value="#{playlist.tracks}" var="track">
-                <h:column>
-                    <h:outputText value="#{track.title}" style="color: #{track.availability ? '#000000' : '#FF0000'}"/>
-                </h:column>
-            </h:dataTable>
-        </h:column>
-    </h:dataTable>
-    <h:messages globalOnly="true"/>
+    <h:form id="playlistsForm">
+        Your palaylists:
+        <p:accordionPanel  id="playlists" value="#{playlistsBacking.playlists.toArray()}" var="playlist" activeIndex="null">
+            <p:tab title="#{playlist.title}">
+                <p:dataList value="#{playlist.tracks.toArray()}" var="track" type="unordered" itemType="none">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{track.title}"
+                                      style="font-weight: bold"
+                                      styleClass="#{track.availability ? 'trackAvaible' : 'trackNotAvailable'}"/>
+
+                        <p:commandLink update=":playlistsForm:trackDetail" oncomplete="PF('trackDialog').show()" title="View Detail">
+                            <h:outputText value="details" style="margin:0 auto;" />
+                            <f:setPropertyActionListener value="#{track}" target="#{playlistsBacking.selectedTrack}" />
+                        </p:commandLink>
+                    </h:panelGrid>
+                </p:dataList>
+            </p:tab>
+        </p:accordionPanel>
+        <p:dialog header="Track Info" widgetVar="trackDialog" modal="true" resizable="false"
+                  width="600" height="700">
+            <p:outputPanel id="trackDetail" style="text-align:center;">
+                <p:panelGrid  columns="2" rendered="#{not empty playlistsBacking.selectedTrack}">
+                    <f:facet name="header">
+                        <p:graphicImage url="#{playlistsBacking.selectedTrack.thumbnail.orElse('')}"
+                                        rendered="#{playlistsBacking.selectedTrack.thumbnail.isPresent()}"
+                                        width="480" height="360"/>
+                    </f:facet>
+
+                    <h:outputText value="Id:" />
+                    <h:outputText value="#{playlistsBacking.selectedTrack.trackIdInHostProvider}" />
+
+                    <h:outputText value="Availabe" />
+                    <h:outputText value="#{playlistsBacking.selectedTrack.availability ? 'Yes' : 'No'}" />
+
+                    <h:outputText value="Description:"
+                                  rendered="#{playlistsBacking.selectedTrack.description.isPresent()}"/>
+                    <h:outputText value="#{playlistsBacking.selectedTrack.description.orElse('')}"
+                                  rendered="#{playlistsBacking.selectedTrack.description.isPresent()}"/>
+                </p:panelGrid>
+            </p:outputPanel>
+        </p:dialog>
+    </h:form>
+    <p:growl id="growl" showDetail="true" globalOnly="true"/>
 </h:body>
 </html>

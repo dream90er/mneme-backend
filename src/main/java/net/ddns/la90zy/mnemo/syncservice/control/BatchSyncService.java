@@ -4,6 +4,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * Service for batch synchronization all playlists in Mnemo service.
+ *
+ * @author DreameR
+ */
 //TODO use ready-made batch processing solutions like JBatch
 @ApplicationScoped
 public class BatchSyncService {

@@ -24,11 +24,13 @@ public class DatabaseBootstrapBean {
     private HostProviderService hostProviderService;
 
     @Inject
-    @ConfigProperty(name = "net.ddns.la90zy.mnemo.defaultadminlogin")
+    @ConfigProperty(name = "net.ddns.la90zy.mnemo.defaultadminlogin",
+            defaultValue = "admin")
     private String defaultAdminLogin;
 
     @Inject
-    @ConfigProperty(name = "net.ddns.la90zy.mnemo.defaultadminpassword")
+    @ConfigProperty(name = "net.ddns.la90zy.mnemo.defaultadminpassword",
+            defaultValue = "admin")
     private String defaultAdminPassword;
 
     @Inject

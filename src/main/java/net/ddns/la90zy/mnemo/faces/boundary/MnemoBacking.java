@@ -1,19 +1,21 @@
 package net.ddns.la90zy.mnemo.faces.boundary;
 
 import net.ddns.la90zy.mnemo.syncservice.boundary.MnemoFacade;
+import net.ddns.la90zy.mnemo.syncservice.control.HostProviderNotAvailableException;
 import net.ddns.la90zy.mnemo.syncservice.control.PlaylistNotFoundException;
-import net.ddns.la90zy.mnemo.syncservice.entity.Playlist;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 @Model
-public class MnemoMain {
+public class MnemoBacking {
+
+    @Inject
+    private PlaylistsBacking playlistsBacking;
 
     @Inject
     private MnemoFacade mnemoFacade;
@@ -23,26 +25,23 @@ public class MnemoMain {
 
     private UIComponent playlistIdField;
 
-    private Set<Playlist> playlists;
-
+    @NotNull
     private String playlistId;
 
-    @PostConstruct
-    public void init() {
-        playlists = mnemoFacade.getUserPlaylists();
-    }
-
     public void submit() {
-        //TODO this is not how exception handling works in JSF
-        // PS This is how exception handling works, but... not with AJAX :P
         try {
             mnemoFacade.addPlaylistUserRequest("Youtube", playlistId);
-            playlists = mnemoFacade.getUserPlaylists();
+            playlistsBacking.update();
         } catch (PlaylistNotFoundException e) {
             facesContext.addMessage(playlistIdField.getClientId(facesContext), new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
-                    e.getMessage(),
-                    String.format("Playlist ID: %s\nProvider: %s", e.getPlaylistExternalId(), e.getHostProviderName())));
+                    "Playlist not found or access forbidden.",
+                    null));
+        } catch (HostProviderNotAvailableException e) {
+            facesContext.addMessage(playlistIdField.getClientId(facesContext), new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Service not available. Please retry later.",
+                    null));
         }
     }
 
@@ -50,9 +49,6 @@ public class MnemoMain {
         this.playlistId = playlistId;
     }
 
-    public Set<Playlist> getPlaylists() {
-        return playlists;
-    }
 
     public String getPlaylistId() {
         return playlistId;

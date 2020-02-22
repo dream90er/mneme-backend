@@ -5,6 +5,11 @@ import javafx.util.Pair;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
+/**
+ * Default implementation of {@link YoutubeRequestBuilder} interface.
+ *
+ * @author DreameR
+ */
 public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
 
     private static final String PART = "snippet";
@@ -15,6 +20,11 @@ public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
 
     private final String  API_KEY;
 
+    /**
+     *
+     * @param apiUrl URL to Youtube API endpoint.
+     * @param apiKey API key from <a href="https://console.developers.google.com/apis/credentials">Credentials page</a>.
+     */
     public DefaultYoutubeRequestBuilder(String apiUrl, String apiKey) {
         this.API_URL = apiUrl;
         this.API_KEY = apiKey;

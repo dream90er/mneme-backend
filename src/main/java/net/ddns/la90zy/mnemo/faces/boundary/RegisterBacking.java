@@ -9,17 +9,22 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @Model
-public class Register {
+public class RegisterBacking {
 
     private UIComponent loginField;
 
+    @NotNull
     private String login;
 
+    @Email
     private String email;
 
+    @NotNull
     private String password;
 
     @Inject
@@ -42,9 +47,13 @@ public class Register {
             mnemoFacade.registerUser(login, email, password);
             flash.setKeepMessages(true);
             facesContext.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "You successfully registered. Now you can log in.", null));
+                    FacesMessage.SEVERITY_INFO,
+                    "You successfully registered. Now you can log in.",
+                    null));
             externalContext.redirect(
-                    externalContext.getRequestContextPath() + "/login.xhtml?new=true&login=" + login);
+                    externalContext.getRequestContextPath() +
+                            "/login.xhtml?faces-redirect=true&new=true&login=" +
+                            login);
         }
     }
 

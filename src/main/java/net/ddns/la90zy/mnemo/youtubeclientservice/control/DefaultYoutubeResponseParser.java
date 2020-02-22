@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Default implementation of {@link YoutubeResponseParser} interface.
+ *
+ * @author DreameR
+ */
 public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
 
     @Override
@@ -34,7 +39,9 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
             throw new YoutubeParserException("Playlist not found or access forbidden.");
         }
         List<Track> tracks = new ArrayList<>(50);
-        String nextPageToken = page.getString("nextPageToken");
+        String nextPageToken = page.containsKey("nextPageToken")
+                ? page.getString("nextPageToken")
+                : "";
         page.getJsonArray("items").stream()
                 .map(JsonValue::asJsonObject)
                 .map(j -> j.getJsonObject("snippet"))
@@ -43,6 +50,7 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
         return PlaylistPage.create(tracks, nextPageToken);
     }
 
+    //Utility method for Track entity parsing.
     private Track parsePlaylistItemSnippet(JsonObject snippet) {
         String videoId = snippet
                 .getJsonObject("resourceId")
@@ -71,6 +79,7 @@ public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
                 .build();
     }
 
+    //Utility method for error response indicating.
     private boolean isError(JsonObject object) {
         return object.containsKey("error") || object.getJsonObject("pageInfo").getInt("totalResults") == 0;
     }

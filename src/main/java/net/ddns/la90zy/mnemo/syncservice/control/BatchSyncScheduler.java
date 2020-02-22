@@ -6,6 +6,12 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Scheduler for playlists batch synchronization.
+ *
+ * @see BatchSyncService
+ * @author DreameR
+ */
 @Singleton
 @Startup
 @DependsOn("DatabaseBootstrapBean")

@@ -17,19 +17,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of {@link HostProviderClientService} interface for Youtube service.
+ *
+ * @author DreameR
+ */
 @HostProviderName("Youtube")
 @Stateless
 public class YoutubeClientService implements HostProviderClientService {
-
-    @Inject
-    private YoutubeApiClient youtubeApiClient;
 
     private final YoutubeResponseParser youtubeResponseParser;
 
     private final YoutubeRequestBuilder youtubeRequestBuilder;
 
     @Inject
-    public YoutubeClientService(@ConfigProperty(name = "net.ddns.la90zy.mnemo.youtubeapiurl") String apiUrl,
+    private YoutubeApiClient youtubeApiClient;
+
+    @Inject
+    public YoutubeClientService(@ConfigProperty(name = "net.ddns.la90zy.mnemo.youtubeapiurl",
+            defaultValue = "https://www.googleapis.com/youtube/v3") String apiUrl,
                                 @ConfigProperty(name = "net.ddns.la90zy.mnemo.youtubeapikey") String apiKey) {
         youtubeResponseParser = new DefaultYoutubeResponseParser();
         youtubeRequestBuilder = new DefaultYoutubeRequestBuilder(apiUrl, apiKey);
@@ -50,7 +56,7 @@ public class YoutubeClientService implements HostProviderClientService {
         }
         return result;
     }
-
+    //Utility method for process single page request.
     private Optional<String> processPlaylistPageRequest(URI request, List<Track> result) {
         JsonObject response = youtubeApiClient.processRequest(request);
         PlaylistPage playlistPage = youtubeResponseParser.parsePlaylistPage(response);

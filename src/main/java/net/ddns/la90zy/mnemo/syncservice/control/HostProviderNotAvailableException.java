@@ -2,6 +2,12 @@ package net.ddns.la90zy.mnemo.syncservice.control;
 
 import javax.ejb.ApplicationException;
 
+/**
+ * Exception thrown by {@link HostProviderClientService}.
+ *
+ * @see HostProviderClientService
+ * @author DreameR
+ */
 @ApplicationException(rollback = true)
 public class HostProviderNotAvailableException extends MnemoException{
 

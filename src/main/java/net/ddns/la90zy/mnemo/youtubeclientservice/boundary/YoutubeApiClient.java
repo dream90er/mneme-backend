@@ -12,6 +12,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.net.URI;
 
+/**
+ * REST client for processing requests to Youtube API.
+ *
+ * @author DreameR
+ */
 @Stateless
 public class YoutubeApiClient {
 
@@ -22,6 +27,11 @@ public class YoutubeApiClient {
         client = ClientBuilder.newClient();
     }
 
+    /**
+     * Process request for given URL query.
+     * @param targetUri URL query.
+     * @return response from Youtube API in JSON format.
+     */
     public JsonObject processRequest(URI targetUri) {
         WebTarget target = client.target(targetUri);
         JsonObject response;

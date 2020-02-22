@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 @Model
-public class Logout {
+public class LogoutBacking {
 
     @Inject
     private HttpServletRequest httpServletRequest;

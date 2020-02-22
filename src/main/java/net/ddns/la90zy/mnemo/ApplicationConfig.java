@@ -33,16 +33,19 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 public class ApplicationConfig {
 
         @Inject
-        @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Iterations")
-        private String hashIterations = "3072";
+        @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Iterations",
+                defaultValue = "3072")
+        private String hashIterations;
 
         @Inject
-        @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Algorithm")
-        private String hashAlgorithm = "PBKDF2WithHmacSHA512";
+        @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Algorithm",
+                defaultValue = "PBKDF2WithHmacSHA512")
+        private String hashAlgorithm;
 
         @Inject
-        @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.SaltSizeBytes")
-        private String hashSaltSizeBytes = "64";
+        @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.SaltSizeBytes",
+                defaultValue = "64")
+        private String hashSaltSizeBytes;
 
         public String[] getHashAlgorithmParameters() {
                 return new String[] {"Pbkdf2PasswordHash.Iterations=" + hashIterations,

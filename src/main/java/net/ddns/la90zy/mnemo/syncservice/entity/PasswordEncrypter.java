@@ -9,36 +9,44 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JPA converter for password hashing.
+ *
+ * @author DreameR
+ */
 @Converter
 public class PasswordEncrypter implements AttributeConverter<String, String> {
 
     @Inject
-    @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Iterations")
-    private String hashIterations = "3072";
+    @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Iterations",
+            defaultValue = "3072")
+    private String hashIterations;
 
     @Inject
-    @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Algorithm")
-    private String hashAlgorithm = "PBKDF2WithHmacSHA512";
+    @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Algorithm",
+            defaultValue = "PBKDF2WithHmacSHA512")
+    private String hashAlgorithm;
 
     @Inject
-    @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.SaltSizeBytes")
-    private String hashSaltSizeBytes = "64";
+    @ConfigProperty(name = "net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.SaltSizeBytes",
+            defaultValue = "64")
+    private String hashSaltSizeBytes;
 
     @Inject
     private Pbkdf2PasswordHash pbkdf2PasswordHash;
 
     @Override
-    public String convertToDatabaseColumn(String s) {
+    public String convertToDatabaseColumn(String rawPassword) {
         Map<String, String> parameters= new HashMap<>();
         parameters.put("Pbkdf2PasswordHash.Iterations", hashIterations);
         parameters.put("Pbkdf2PasswordHash.Algorithm", hashAlgorithm);
         parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", hashSaltSizeBytes);
         pbkdf2PasswordHash.initialize(parameters);
-        return pbkdf2PasswordHash.generate(s.toCharArray());
+        return pbkdf2PasswordHash.generate(rawPassword.toCharArray());
     }
 
     @Override
-    public String convertToEntityAttribute(String s) {
-        return s;
+    public String convertToEntityAttribute(String passwordHash) {
+        return passwordHash;
     }
 }

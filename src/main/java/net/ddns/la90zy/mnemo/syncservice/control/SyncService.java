@@ -16,6 +16,12 @@ import java.util.stream.Collectors;
 
 //TODO refactor this class
 // maybe split on smaller classes
+
+/**
+ * Playlist synchronization service bean.
+ *
+ * @author DreameR
+ */
 @Stateless
 public class SyncService {
 
@@ -31,6 +37,11 @@ public class SyncService {
     @Inject
     private HostProviderService hostProviderService;
 
+    /**
+     * Synchronize playlist, that already exist in Mnemo service.
+     * @param playlistInternalId Mnemo service specific Id of playlist.
+     * @param accessToken access token of concrete user, received from host provider. Blank if not provided.
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void sync(Long playlistInternalId, String accessToken) {
         Playlist existingPlaylist = playlistService.getPlaylistById(playlistInternalId);
@@ -47,6 +58,13 @@ public class SyncService {
         }
     }
 
+    /**
+     * Add and synchronize playlist, that not yet exist in Mnemo service.
+     * @param hostProviderName name of host provider.
+     * @param playlistId host provider specific playlist Id.
+     * @param accessToken access token of concrete user, received from host provider. Blank if not provided.
+     * @return fresh created and synchronized playlist entity.
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Playlist syncNew(String hostProviderName, String playlistId, String accessToken) {
         HostProviderClientService hostProviderClientService = hostProviderClientServiceFactory
@@ -59,6 +77,8 @@ public class SyncService {
         return playlist;
     }
 
+    //Utility method for adding new track in playlist. If Mnemo service already keep them(from another playlist),
+    //then already existing version will be added.
     private void addTrack(Playlist playlist, Track newTrack) {
         String videoId = newTrack.getTrackIdInHostProvider();
         HostProvider hostProvider = playlist.getHostProvider();
@@ -70,6 +90,7 @@ public class SyncService {
         playlist.addTrack(track);
     }
 
+    //Utility method for merging Mnemo version of playlist and track received from host provider.
     private void merge(Playlist existingPlaylist, List<Track> receivedTracks) {
         Set<String> existingIds = existingPlaylist.getTracks()
                 .stream()

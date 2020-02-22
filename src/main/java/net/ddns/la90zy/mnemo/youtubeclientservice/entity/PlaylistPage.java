@@ -24,7 +24,7 @@ public class PlaylistPage {
     }
 
     public Optional<String> getNextPageToken() {
-        return null == nextPageToken
+        return nextPageToken.isEmpty()
                 ? Optional.empty()
                 : Optional.of(nextPageToken);
     }

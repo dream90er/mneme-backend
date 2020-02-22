@@ -13,13 +13,16 @@ import javax.security.enterprise.authentication.mechanism.http.AuthenticationPar
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @Model
-public class Login {
+public class LoginBacking {
 
+    @NotNull
     private String password;
 
+    @NotNull
     @Inject
     @ManagedProperty("#{param.login}")
     private String login;
