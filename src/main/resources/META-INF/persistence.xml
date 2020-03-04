@@ -5,8 +5,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 
-    <persistence-unit name="MnemoDb" transaction-type="JTA">
-        <jta-data-source>jdbc/MnemoDb</jta-data-source>
+    <persistence-unit name="MnemeDb" transaction-type="JTA">
+        <jta-data-source>jdbc/MnemeDb</jta-data-source>
         <properties>
             <property name="eclipselink.logging.level" value="FINE" />
             <property name="eclipselink.logging.level.sql" value="FINE"/>

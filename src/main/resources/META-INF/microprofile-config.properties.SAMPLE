@@ -1,7 +1,7 @@
-net.ddns.la90zy.mnemo.youtubeapikey = ENTER_YOUR_API_KEY
-net.ddns.la90zy.mnemo.youtubeapiurl = https://www.googleapis.com/youtube/v3
-net.ddns.la90zy.mnemo.defaultadminlogin = admin
-net.ddns.la90zy.mnemo.defaultadminpassword = admin
-net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Iterations = 3072
-net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.Algorithm = PBKDF2WithHmacSHA512
-net.ddns.la90zy.mnemo.Pbkdf2PasswordHash.SaltSizeBytes = 64
+net.ddns.la90zy.mneme.youtubeapikey = ENTER_YOUR_API_KEY
+net.ddns.la90zy.mneme.youtubeapiurl = https://www.googleapis.com/youtube/v3
+net.ddns.la90zy.mneme.defaultadminlogin = admin
+net.ddns.la90zy.mneme.defaultadminpassword = admin
+net.ddns.la90zy.mneme.Pbkdf2PasswordHash.Iterations = 3072
+net.ddns.la90zy.mneme.Pbkdf2PasswordHash.Algorithm = PBKDF2WithHmacSHA512
+net.ddns.la90zy.mneme.Pbkdf2PasswordHash.SaltSizeBytes = 64

@@ -21,8 +21,8 @@
     
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Mnemo service pages</web-resource-name>
-            <url-pattern>/mnemo/*</url-pattern>
+            <web-resource-name>Mneme service pages</web-resource-name>
+            <url-pattern>/mneme/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>USER</role-name>
@@ -76,4 +76,13 @@
         <param-value>true</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>nova-light</param-value>
+    </context-param>
 </web-app>

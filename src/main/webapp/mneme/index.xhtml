@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:param name="title" value="Mneme"/>
+
+    <ui:define name="content">
+        <div class="ui-fluid ui-g">
+            <div class="ui-g-12" style="height: 100px"/>
+            <div class="ui-g-12 ui-md-8 ui-md-offset-2">
+                <h:form id="addPlaylistForm">
+                    <h:outputText value="Here you can add Youtube playlists to your accaunt:"
+                                  style="font-family: Arial,sans-serif"/>
+                    <div class="ui-inputgroup" style="margin: 10px 0px">
+                        <span class="ui-inputgroup-addon"><i class="fa fa-youtube"></i></span>
+                        <p:inputText id="inputPlaylist"
+                                     value="#{mnemeBacking.playlistId}"
+                                     binding="#{mnemeBacking.playlistIdField}"/>
+
+                        <p:commandButton value="Add"
+                                         action="#{mnemeBacking.submit}"
+                                         ajax="false"
+                                         icon="fa fa-plus"/>
+                    </div>
+                    <p:message for="inputPlaylist"/>
+
+                </h:form>
+            </div>
+            <div class="ui-g-12">
+                <h:form id="playlistsForm">
+                    <h:outputText value="Your palaylists:" style="font-family: Arial,sans-serif"/>
+                    <p:accordionPanel id="playlists"
+                                      value="#{playlistsBacking.playlists.toArray()}"
+                                      var="playlist"
+                                      activeIndex="null">
+                        <p:tab title="#{playlist.title}">
+                            <p:commandButton value="Sync"
+                                             action="#{mnemeBacking.update(playlist.id)}"
+                                             ajax="false"
+                                             icon="fa fa-refresh"
+                                             style="width: fit-content"/>
+                            <p:dataTable value="#{playlist.tracks.toArray()}" var="track">
+                                <p:column headerText="Title">
+                                    <h:outputText value="#{track.title}"/>
+                                </p:column>
+
+                                <p:column headerText="ID" style="width: 110px; text-align: center">
+                                    <h:outputText value="#{track.trackIdInHostProvider}"/>
+                                </p:column>
+
+                                <p:column headerText="Status"
+                                          style="width: 50px; text-align: center">
+                                    <i class="#{track.availability ? 'fa fa-check' : 'fa fa-close'}"
+                                       style="color: #{track.availability ? '#5cb85c' : '#d9534f'};
+                                   font-weight: bold;
+                                   font-size: x-large"
+                                       title="#{track.availability ? 'Available' : 'Not available'}"/>
+                                </p:column>
+
+                                <p:column headerText="Details"
+                                          style="width: 50px; text-align: center">
+                                    <p:commandButton update=":trackDialog"
+                                                     oncomplete="PF('trackDialog').show()"
+                                                     title="View Details" icon="fa fa-info">
+                                        <f:setPropertyActionListener value="#{track}"
+                                                                     target="#{playlistsBacking.selectedTrack}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:accordionPanel>
+
+                </h:form>
+            </div>
+        </div>
+
+
+        <p:dialog widgetVar="trackDialog"
+                  id="trackDialog"
+                  modal="true"
+                  resizable="false"
+                  draggable="false"
+                  responsive="true"
+                  position="center"
+                  blockScroll="true"
+                  closeOnEscape="true"
+                  height="70vh"
+                  width="560px">
+            <f:facet name="header">
+                <h:outputText value="Track Details"/>
+            </f:facet>
+            <p:panelGrid columns="1"
+                         layout="grid"
+                         styleClass="ui-panelgrid-blank"
+                         rendered="#{not empty playlistsBacking.selectedTrack}"
+                         style="text-align: center">
+                <p:graphicImage url="#{playlistsBacking.selectedTrack.thumbnail.orElse('')}"
+                                rendered="#{playlistsBacking.selectedTrack.thumbnail.isPresent()}"
+                                width="480" height="360"/>
+
+                <h:outputText value="#{playlistsBacking.selectedTrack.title}" style="font-weight: bold"/>
+
+                <h:outputText value="#{playlistsBacking.selectedTrack.description.orElse('')}"
+                              rendered="#{playlistsBacking.selectedTrack.description.isPresent()}"/>
+            </p:panelGrid>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

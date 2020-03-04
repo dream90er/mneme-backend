@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:p="http://primefaces.org/ui">
+    <p:menubar style="margin: 8px">
+        <p:menuitem outcome="/index" icon="fa fa-home"/>
+        <f:facet name="options">
+            <c:if test="#{not empty request.userPrincipal}">
+                <h:form>
+                    <p:commandButton value="Logout" action="#{logoutBacking.submit}" ajax="false"/>
+                </h:form>
+            </c:if>
+            <c:if test="#{empty request.userPrincipal}">
+                <p:button value="Log In" outcome="/login"/>
+                <p:button value="Sign Up" outcome="/register"/>
+            </c:if>
+        </f:facet>
+    </p:menubar>
+</ui:composition>

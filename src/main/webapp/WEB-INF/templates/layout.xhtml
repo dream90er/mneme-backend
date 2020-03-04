@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>#{title}</title>
+</h:head>
+
+<h:body>
+    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: #f9f9f9">
+        <ui:include src="/WEB-INF/includes/layout/header.xhtml"/>
+    </header>
+    <main style="margin-bottom: 50px; margin-top: 50px">
+        <ui:insert name="content"/>
+    </main>
+    <footer style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; height: 50px; background-color: #f9f9f9">
+        <ui:include src="/WEB-INF/includes/layout/footer.xhtml"/>
+    </footer>
+    <p:growl id="growl" showDetail="true" globalOnly="true"/>
+</h:body>
+
+</html>
