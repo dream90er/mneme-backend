@@ -4,6 +4,7 @@ import net.ddns.la90zy.mneme.syncservice.entity.Playlist;
 import net.ddns.la90zy.mneme.syncservice.entity.Track;
 import net.ddns.la90zy.mneme.youtubeclientservice.entity.PlaylistPage;
 
+import javax.ejb.Stateless;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author DreameR
  */
+@Stateless
 public class DefaultYoutubeResponseParser implements YoutubeResponseParser {
 
     @Override

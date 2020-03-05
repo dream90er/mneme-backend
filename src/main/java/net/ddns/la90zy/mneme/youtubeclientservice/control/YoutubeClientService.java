@@ -33,13 +33,11 @@ public class YoutubeClientService implements HostProviderClientService {
     private YoutubeApiClient youtubeApiClient;
 
     @Inject
-    public YoutubeClientService(@ConfigProperty(name = "net.ddns.la90zy.mneme.youtubeapiurl",
-            defaultValue = "https://www.googleapis.com/youtube/v3") String apiUrl,
-                                @ConfigProperty(name = "net.ddns.la90zy.mneme.youtubeapikey") String apiKey,
-                                YoutubeApiClient youtubeApiClient) {
-
-        youtubeResponseParser = new DefaultYoutubeResponseParser();
-        youtubeRequestBuilder = new DefaultYoutubeRequestBuilder(apiUrl, apiKey);
+    public YoutubeClientService(YoutubeApiClient youtubeApiClient,
+                                YoutubeResponseParser youtubeResponseParser,
+                                YoutubeRequestBuilder youtubeRequestBuilder) {
+        this.youtubeResponseParser = youtubeResponseParser;
+        this.youtubeRequestBuilder = youtubeRequestBuilder;
         this.youtubeApiClient = youtubeApiClient;
     }
 
@@ -65,7 +63,7 @@ public class YoutubeClientService implements HostProviderClientService {
     private Optional<String> processPlaylistPageRequest(URI request, List<Track> result) {
         JsonObject response = youtubeApiClient.processRequest(request);
         PlaylistPage playlistPage = youtubeResponseParser.parsePlaylistPage(response);
-        result.addAll(playlistPage.getTracks());
+        playlistPage.getTracks().forEach(result::add);
         return playlistPage.getNextPageToken();
     }
 

@@ -1,7 +1,10 @@
 package net.ddns.la90zy.mneme.youtubeclientservice.control;
 
 import javafx.util.Pair;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
@@ -10,25 +13,21 @@ import java.net.URI;
  *
  * @author DreameR
  */
+@Stateless
 public class DefaultYoutubeRequestBuilder implements YoutubeRequestBuilder {
 
     private static final String PART = "snippet";
 
     private static final String MAX_RESULTS = "50";
 
-    private final String API_URL;
+    @Inject
+    @ConfigProperty(name = "net.ddns.la90zy.mneme.youtubeapiurl",
+            defaultValue = "https://www.googleapis.com/youtube/v3")
+    private String API_URL;
 
-    private final String  API_KEY;
-
-    /**
-     *
-     * @param apiUrl URL to Youtube API endpoint.
-     * @param apiKey API key from <a href="https://console.developers.google.com/apis/credentials">Credentials page</a>.
-     */
-    public DefaultYoutubeRequestBuilder(String apiUrl, String apiKey) {
-        this.API_URL = apiUrl;
-        this.API_KEY = apiKey;
-    }
+    @Inject
+    @ConfigProperty(name = "net.ddns.la90zy.mneme.youtubeapikey")
+    private String  API_KEY;
 
     @Override
     public URI buildPlaylistPageRequest(String playlistId, String accessToken) {
